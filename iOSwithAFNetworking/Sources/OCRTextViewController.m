@@ -38,4 +38,8 @@
     }
 }
 
+- (IBAction)buttonPressed:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 @end

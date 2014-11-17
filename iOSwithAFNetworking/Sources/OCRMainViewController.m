@@ -35,7 +35,12 @@ static NSString * const kExportFormat = @"txt";
 	self.navigationItem.leftBarButtonItem = takePhotoButton;
 	self.navigationItem.rightBarButtonItem = recognizeButton;
 	
-	self.imageView.image = [UIImage imageNamed:@"sample.jpg"];
+    NSString *fullURL = @"http://tender.kitchen/prices.htm";
+    NSURL *url = [NSURL URLWithString:fullURL];
+    NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
+    [_webView loadRequest:requestObj];
+
+    _webView.hidden = NO;
 }
 
 #pragma mark -
@@ -45,6 +50,7 @@ static NSString * const kExportFormat = @"txt";
 	UIImagePickerController* imagePicker = [[UIImagePickerController alloc] init];
 	
 	imagePicker.sourceType = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] ? UIImagePickerControllerSourceTypeCamera :  UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 	imagePicker.mediaTypes = [NSArray arrayWithObject:(NSString *)kUTTypeImage];
 	imagePicker.allowsEditing = NO;
 	imagePicker.delegate = self;
@@ -119,6 +125,13 @@ static NSString * const kExportFormat = @"txt";
 	    self.textViewController.text = [[NSString alloc] initWithData:downloadedData encoding:NSUTF8StringEncoding];
 		
         [self.navigationController pushViewController:self.textViewController animated:YES];
+        
+        NSString *fullURL = @"http://tender.kitchen/prices-alert.htm";
+        NSURL *url = [NSURL URLWithString:fullURL];
+        NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
+        [_webView loadRequest:requestObj];
+        
+        _webView.hidden = NO;
 	} failure:^(NSError *error) {
 		[self showError:error];
 	}];
@@ -145,6 +158,7 @@ static NSString * const kExportFormat = @"txt";
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    _webView.hidden = YES;
 	self.imageView.image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	[picker dismissModalViewControllerAnimated:YES];
 }
